@@ -1,1 +1,3 @@
 .envrc
+**/staticfiles/
+db.sqlite3

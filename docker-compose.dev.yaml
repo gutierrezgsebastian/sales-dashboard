@@ -17,9 +17,19 @@ services:
     volumes:
       - ./backend/:/code/usr/src/app/
 #     # command: pipenv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
-    command: pipenv run python manage.py runserver 0.0.0.0:8000
+    command:
+      bash -c  "pipenv run -q python manage.py collectstatic --noinput &&
+                pipenv run -q python manage.py makemigrations &&
+                pipenv run -q python manage.py migrate &&
+                pipenv run -q uvicorn core.asgi:application --reload --host 0.0.0.0 --port 8001 &
+                pipenv run -q uvicorn core.asgi:fastapp --reload --host 0.0.0.0 --port 8000 &"
+      # bash -c  "pipenv run uvicorn core.asgi:fastapp --reload --host 0.0.0.0 --port 8000 &&
+      #           pipenv run python manage.py makemigrate &&
+      #           pipenv run python manage.py migrate &&
+      #           pipenv run uvicorn core.asgi:application --reload --host 0.0.0.0 --port 8001"
     ports:
       - "8000:8000"
+      - "8001:8001"
     env_file:
       - ./backend/.env.python.dev
     depends_on:

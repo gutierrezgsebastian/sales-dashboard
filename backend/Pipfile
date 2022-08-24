@@ -9,6 +9,8 @@ numpy = "*"
 pandas = "*"
 psycopg2 = "*"
 psycopg-binary = "*"
+fastapi = {extras = ["all"], version = "*"}
+whitenoise = "*"
 
 [dev-packages]
 bandit = "*"
